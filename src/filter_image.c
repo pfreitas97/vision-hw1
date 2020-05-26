@@ -465,5 +465,52 @@ image *sobel_image(image im)
 image colorize_sobel(image im)
 {
     // TODO
-    return make_image(1,1,1);
+
+    image GX = make_gx_filter();
+    image GY = make_gy_filter();
+
+
+    image GXim = convolve_image(im,GX,0);
+
+    image GYim = convolve_image(im, GY, 0);
+
+    image mag = make_image(im.w,im.h,1);
+
+    image theta = make_image(im.w,im.h,1);
+
+
+    image colorSOBEL = make_image(im.w,im.h,3);
+
+                            // GXIM.C = 1;
+    for (int i = 0; i < GXim.w*GXim.h*GXim.c; ++i)
+    {
+        mag.data[i] = sqrt(pow(GXim.data[i],2) + pow(GYim.data[i],2));
+
+        theta.data[i] = atan(GYim.data[i]/ GXim.data[i]);
+
+        // hue
+
+        //colorSOBEL.data[i] = theta.data[i];
+
+         colorSOBEL.data[i] =  theta.data[i] < 0 ? ((theta.data[i]/6) + 1) 
+                                 : (theta.data[i]/6); 
+
+        //sat
+
+        colorSOBEL.data[i + im.w*im.h] = mag.data[i];                        
+
+        //value
+
+        colorSOBEL.data[i + 2*im.w*im.h] = mag.data[i];
+
+
+    }
+
+    hsv_to_rgb(colorSOBEL);
+
+    //feature_normalize(colorSOBEL);
+    clamp_image(colorSOBEL);
+
+
+    return colorSOBEL;
 }
