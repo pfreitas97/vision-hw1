@@ -1,4 +1,5 @@
 #include <math.h>
+#include <stdio.h>
 #include <string.h>
 #include "image.h"
 #include "test.h"
@@ -6,8 +7,11 @@
 
 int main(int argc, char **argv)
 {
+
+
     char *in = find_char_arg(argc, argv, "-i", "data/dog.jpg");
-    char *out = find_char_arg(argc, argv, "-o", "out");
+    char *out = find_char_arg(argc, argv, "-o", "out");    
+
     //float scale = find_float_arg(argc, argv, "-s", 1);
     if(argc < 2){
         printf("usage: %s [test | grayscale]\n", argv[0]);  
